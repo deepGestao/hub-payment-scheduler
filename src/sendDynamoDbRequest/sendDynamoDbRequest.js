@@ -22,7 +22,7 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
       TableName: `hub-payment-scheduler-queue-${process.env.AWS_ENV}`,
       Item: {
         token: { S: 'pending' },
-        when: { S: `${token}|${getProcessDate(planData)}` },
+        when: { S: `${token}|${new Date().toISOString()}` },
         frequency: { S: `${planData.frequency}` },
         frequencyType: { S: `${planData.frequencyType}` },
         reason: { S: `${planData.reason}` },
@@ -35,6 +35,7 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
         subscriptionId: { S: `${content.subscriptionId}` },
         async: { S: `${content.async}` },
         createdAt: { S: `${new Date().toISOString()}` },
+        dateToProcess: { S: `${getProcessDate(planData)}` },
       },
     })
     .promise();

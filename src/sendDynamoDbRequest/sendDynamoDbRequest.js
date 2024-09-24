@@ -41,6 +41,7 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
         expiresAt: { S: `${new Date(new Date(dateToProcess).setDate(new Date(dateToProcess).getDate() + 10)).toISOString()}` },
         planId: { S: `${content.planId}` },
         paymentMethod: { S: `${content.paymentMethod}` },
+        document: { S: customerData.document },
       },
     })
     .promise();

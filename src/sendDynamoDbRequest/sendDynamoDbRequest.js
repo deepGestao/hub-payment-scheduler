@@ -29,13 +29,15 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
         amount: { S: `${planData.amount}` },
         originId: { S: `${content.origin}|${content.id}` },
         contact: { S: `${customerData.contact}` },
-        zipCode: { S: `${customerData.zipCode}` },
-        streetName: { S: `${content.streetName}` },
-        streetNumber: { S: `${content.streetNumber}` },
+        zipCode: { S: `${customerData.address.zipCode}` },
+        streetName: { S: `${customerData.address.streetName}` },
+        streetNumber: { S: `${customerData.address.streetNumber}` },
         subscriptionId: { S: `${content.subscriptionId}` },
         async: { S: `${content.async}` },
         createdAt: { S: `${new Date().toISOString()}` },
         dateToProcess: { S: `${getProcessDate(planData)}` },
+        planId: { S: `${content.planId}` },
+        paymentMethod: { S: `${content.paymentMethod}` },
       },
     })
     .promise();

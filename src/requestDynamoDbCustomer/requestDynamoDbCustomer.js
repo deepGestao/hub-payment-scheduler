@@ -23,14 +23,14 @@ const requestDynamoDbCustomer = async (customerId) => {
   }).promise();
   if (response && response.Item) {
     const data = DynamoDB.Converter.unmarshall(response.Item);
-    // result.name = data.name;
-    // result.document = data.document;
+    result.name = data.name;
+    result.document = data.document;
     result.contact = data.contact;
     result.email = data.email;
-    // result.lastName = data.lastName;
-    // result.address.zipCode = data.zipCode;
-    // result.address.streetName = data.streetName;
-    // result.address.streetNumber = data.streetNumber;
+    result.lastName = data.lastName;
+    result.address.zipCode = data.zipCode;
+    result.address.streetName = data.streetName;
+    result.address.streetNumber = data.streetNumber;
   }
   return result;
 };

@@ -10,6 +10,7 @@ const getProcessDate = (planData) => {
   } else if (planData.frequencyType === 'days') {
     date.setDate(now.getDate() + planData.frequency);
   }
+  date.setDate(date.getDate() - 10);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -17,6 +18,7 @@ const getProcessDate = (planData) => {
 };
 
 const sendDynamoDbRequest = async (content, customerData, planData, token) => {
+  const dateToProcess = getProcessDate(planData);
   await dynamodb
     .putItem({
       TableName: `hub-payment-scheduler-queue-${process.env.AWS_ENV}`,
@@ -35,7 +37,8 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
         subscriptionId: { S: `${content.subscriptionId}` },
         async: { S: `${content.async}` },
         createdAt: { S: `${new Date().toISOString()}` },
-        dateToProcess: { S: `${getProcessDate(planData)}` },
+        dateToProcess: { S: `${dateToProcess}` },
+        expiresAt: { S: `${new Date(new Date(dateToProcess).setDate(new Date(dateToProcess).getDate() + 10)).toISOString()}` },
         planId: { S: `${content.planId}` },
         paymentMethod: { S: `${content.paymentMethod}` },
       },
@@ -43,4 +46,4 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
     .promise();
 };
 
-export { sendDynamoDbRequest };
+export { sendDynamoDbRequest, getProcessDate };

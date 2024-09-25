@@ -9,7 +9,7 @@ import { sendDynamoDbRequestStatus } from './sendDynamoDbRequestStatus/sendDynam
 const handler = async (event, context) => {
   console.log(event, context);
   try {
-    const content = JSON.parse(event.body);
+    const content = JSON.parse(event.body).detail;
     console.log(content);
     const validate = parseRequest(content);
     if (validate) {

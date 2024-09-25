@@ -18,7 +18,7 @@ const getProcessDate = (planData) => {
 };
 
 const sendDynamoDbRequest = async (content, customerData, planData, token) => {
-  const dateToProcess = getProcessDate(planData);
+  const dateToProcess = content.date || getProcessDate(planData);
   await dynamodb
     .putItem({
       TableName: `hub-payment-scheduler-queue-${process.env.AWS_ENV}`,

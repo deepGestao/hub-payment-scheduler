@@ -4,7 +4,7 @@ import { getProcessDate } from '../sendDynamoDbRequest/sendDynamoDbRequest';
 const dynamodb = new DynamoDB();
 
 const sendDynamoDbRequestStatus = async (content, customerData, planData, token) => {
-  const dateToProcess = getProcessDate(planData);
+  const dateToProcess = content.date || getProcessDate(planData);
   await dynamodb
     .putItem({
       TableName: `hub-payment-scheduler-status-${process.env.AWS_ENV}`,

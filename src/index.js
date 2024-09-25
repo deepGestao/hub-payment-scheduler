@@ -11,7 +11,7 @@ const handler = async (event, context) => {
     const content = JSON.parse(event.body);
     const validate = parseRequest(content);
     if (validate) {
-      const token = uuid4();
+      const token = content.token || uuid4();
       const customerData = await requestDynamoDbCustomer(content.customerId);
       const planData = await requestDynamoDbPlan(content.planId);
       await sendDynamoDbRequest(content, customerData, planData, token);

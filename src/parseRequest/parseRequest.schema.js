@@ -16,6 +16,10 @@ const schema = {
     customerId: { type: 'string', minLength: 1, maxLength: 255 },
     subscriptionId: { type: 'string', minLength: 1, maxLength: 255 },
     planId: { type: 'string', minLength: 1, maxLength: 255 },
+    date: {
+      type: 'string', minLength: 1, maxLength: 255, format: 'date-time',
+    },
+    token: { type: 'string', minLength: 1, maxLength: 255 },
     async: { type: 'boolean' },
     paymentMethod: { type: 'string', enum: ['pix', 'boleto'] },
   },

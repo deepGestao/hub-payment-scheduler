@@ -13,11 +13,14 @@ const handler = async (event, context) => {
     console.log(content);
     const validate = parseRequest(content);
     if (validate) {
+      const isToUpdateStatus = !content.token;
       const token = content.token || uuid4();
       const customerData = await requestDynamoDbCustomer(content.customerId);
       const planData = await requestDynamoDbPlan(content.planId);
       await sendDynamoDbRequest(content, customerData, planData, token);
-      await sendDynamoDbRequestStatus(content, customerData, planData, token);
+      if (isToUpdateStatus) {
+        await sendDynamoDbRequestStatus(content, customerData, planData, token);
+      }
       return {
         statusCode: 200,
         body: JSON.stringify({ token }),

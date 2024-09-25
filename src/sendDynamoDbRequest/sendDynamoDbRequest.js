@@ -32,6 +32,7 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
         originId: { S: `${content.origin}|${content.id}` },
         contact: { S: `${customerData.contact}` },
         email: { S: `${customerData.email}` },
+        customerId: { S: `${customerData.token}` },
         name: { S: `${customerData.name}` },
         lastName: { S: `${customerData.lastName}` },
         zipCode: { S: `${customerData.address.zipCode}` },

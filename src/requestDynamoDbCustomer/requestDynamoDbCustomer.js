@@ -4,6 +4,7 @@ const dynamodb = new DynamoDB();
 
 const requestDynamoDbCustomer = async (customerId) => {
   const result = {
+    token: '',
     email: '',
     address: {
       zipCode: '',
@@ -24,6 +25,7 @@ const requestDynamoDbCustomer = async (customerId) => {
   if (response && response.Item) {
     const data = DynamoDB.Converter.unmarshall(response.Item);
     result.name = data.name;
+    result.token = data.token;
     result.document = data.document;
     result.contact = data.contact;
     result.email = data.email;

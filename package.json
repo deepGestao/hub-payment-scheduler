@@ -26,6 +26,7 @@
   "homepage": "https://github.com/deepGestao/hub-payment-scheduler#readme",
   "dependencies": {
     "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "axios": "^1.7.7",
     "uuid4": "^2.0.3"
   },

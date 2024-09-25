@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import uuid4 from 'uuid4';
 import { parseRequest } from './parseRequest/parseRequest';
 import { sendDynamoDbRequest } from './sendDynamoDbRequest/sendDynamoDbRequest';
@@ -9,6 +10,7 @@ const handler = async (event, context) => {
   console.log(event, context);
   try {
     const content = JSON.parse(event.body);
+    console.log(content);
     const validate = parseRequest(content);
     if (validate) {
       const token = content.token || uuid4();

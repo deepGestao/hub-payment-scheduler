@@ -21,7 +21,7 @@ const schema = {
     },
     token: { type: 'string', minLength: 1, maxLength: 255 },
     async: { type: 'boolean' },
-    paymentMethod: { type: 'string', enum: ['pix', 'boleto'] },
+    paymentMethod: { type: 'string', enum: ['pix', 'bolbradesco'] },
   },
 };
 

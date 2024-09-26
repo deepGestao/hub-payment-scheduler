@@ -5,6 +5,22 @@ import { sendDynamoDbRequest } from './sendDynamoDbRequest/sendDynamoDbRequest';
 import { requestDynamoDbCustomer } from './requestDynamoDbCustomer/requestDynamoDbCustomer';
 import { requestDynamoDbPlan } from './requestDynamoDbPlan/requestDynamoDbPlan';
 import { sendDynamoDbRequestStatus } from './sendDynamoDbRequestStatus/sendDynamoDbRequestStatus';
+import { verifyIfOrderIsProcessed } from './verifyIfOrderIsProcessed/verifyIfOrderIsProcessed';
+
+const processItem = async (content) => {
+  const token = content.token || uuid4();
+  const isSuccess = await verifyIfOrderIsProcessed(token);
+  if (!isSuccess) {
+    const isToUpdateStatus = !content.token;
+    const customerData = await requestDynamoDbCustomer(content.customerId);
+    const planData = await requestDynamoDbPlan(content.planId);
+    await sendDynamoDbRequest(content, customerData, planData, token);
+    if (isToUpdateStatus) {
+      await sendDynamoDbRequestStatus(content, customerData, planData, token);
+    }
+  }
+  return token;
+};
 
 const handler = async (event, context) => {
   console.log(event, context);
@@ -13,14 +29,7 @@ const handler = async (event, context) => {
     console.log(content);
     const validate = parseRequest(content);
     if (validate) {
-      const isToUpdateStatus = !content.token;
-      const token = content.token || uuid4();
-      const customerData = await requestDynamoDbCustomer(content.customerId);
-      const planData = await requestDynamoDbPlan(content.planId);
-      await sendDynamoDbRequest(content, customerData, planData, token);
-      if (isToUpdateStatus) {
-        await sendDynamoDbRequestStatus(content, customerData, planData, token);
-      }
+      const token = await processItem(content);
       return {
         statusCode: 200,
         body: JSON.stringify({ token }),
@@ -33,7 +42,7 @@ const handler = async (event, context) => {
   } catch (e) {
     console.error(e);
     return {
-      statusCode: 400,
+      statusCode: 500,
       body: JSON.stringify({ message: 'internal server error' }),
     };
   }

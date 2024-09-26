@@ -16,6 +16,9 @@ const schema = {
     customerId: { type: 'string', minLength: 1, maxLength: 255 },
     subscriptionId: { type: 'string', minLength: 1, maxLength: 255 },
     planId: { type: 'string', minLength: 1, maxLength: 255 },
+    expiresAt: {
+      type: 'string', minLength: 1, maxLength: 255, format: 'date-time',
+    },
     date: {
       type: 'string', minLength: 1, maxLength: 255, format: 'date-time',
     },

@@ -19,6 +19,8 @@ const getProcessDate = (planData) => {
 
 const sendDynamoDbRequest = async (content, customerData, planData, token) => {
   const dateToProcess = content.date || getProcessDate(planData);
+  const expiresAt = content.expiresAt ||
+  new Date(new Date(dateToProcess).setDate(new Date(dateToProcess).getDate() + 10)).toISOString();
   await dynamodb
     .putItem({
       TableName: `hub-payment-scheduler-queue-${process.env.AWS_ENV}`,
@@ -42,7 +44,7 @@ const sendDynamoDbRequest = async (content, customerData, planData, token) => {
         async: { S: `${content.async}` },
         createdAt: { S: `${new Date().toISOString()}` },
         dateToProcess: { S: `${dateToProcess}` },
-        expiresAt: { S: `${new Date(new Date(dateToProcess).setDate(new Date(dateToProcess).getDate() + 10)).toISOString()}` },
+        expiresAt: { S: `${expiresAt}` },
         planId: { S: `${content.planId}` },
         paymentMethod: { S: `${content.paymentMethod}` },
         document: { S: customerData.document },
